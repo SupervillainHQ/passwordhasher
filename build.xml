@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="PasswordHasher" default="">
+	<propertyfile file="../../.buildProperties" />
+	
+<!--	<taskdef resource="A3Tasks.tasks" classpath="${antjar.dir}/a3tasks/A3Tasks.jar" />-->
+	
+	<property name="dir.build" value="${basedir}/bin" />
+	<property name="dir.source" value="${basedir}/src" />
+	<property name="dir.classes" value="${basedir}/classes" />
+	<property name="dir.jar" value="${basedir}/publish" />
+	
+	<target name="Clean">
+		<delete dir="${dir.build}"/>
+		<delete dir="${dir.classes}"/>
+	</target>
+	
+	<target name="Compile" depends="Clean">
+		<mkdir dir="${dir.classes}"/>
+		<javac srcdir="${dir.source}" destdir="${dir.classes}" includejavaruntime="yes">
+			<classpath>
+				<fileset dir="/Users/Shared/Java/Apache/commons-cli-1.2/">
+					<include name="commons-cli-1.2.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="Jar" depends="Compile">
+		<mkdir dir="${dir.jar}"/>
+		<jar destfile="${dir.jar}/${jar.name}.jar" basedir="${dir.classes}">
+			<zipfileset includes="**/*.class" src="/Users/Shared/Java/Apache/commons-cli-1.2/commons-cli-1.2.jar"/>
+			<manifest>
+				<attribute name="Main-Class" value="${comp.main.class.qname}"/>
+			</manifest>
+			<!--<fileset dir="${basedir}">
+				<include name="A3Tasks.tasks" />
+			</fileset>-->
+		</jar>
+	</target>
+	
+	<target name="Run">
+		<java jar="${dir.jar}/${jar.name}.jar" fork="true"/>
+	</target>
+	
+	<target name="Jar PasswordHasher" description="Jar PasswordHasher">
+		<property name="main.class" value="${ant.project.name}" />
+		<antcall target="Jar">
+			<param name="comp.main.class" value="${main.class}" />
+			<param name="comp.main.class.qname" value="dk.andkrup.passwordhasher.${main.class}" />
+			<param name="jar.name" value="${main.class}" />
+		</antcall>
+	</target>
+	
+	<target name="Test PasswordHasher" description="Test PasswordHasher" depends="Jar PasswordHasher">
+		<property name="main.class" value="${ant.project.name}" />
+		<antcall target="Run">
+			<param name="jar.name" value="${main.class}" />
+		</antcall>
+	</target>
+	
+</project>
