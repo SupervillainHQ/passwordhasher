@@ -18,7 +18,7 @@
 		<mkdir dir="${dir.classes}"/>
 		<javac srcdir="${dir.source}" destdir="${dir.classes}" includejavaruntime="yes">
 			<classpath>
-				<fileset dir="/Users/Shared/Java/Apache/commons-cli-1.2/">
+				<fileset dir="${basedir}/lib/Apache/commons-cli-1.2/">
 					<include name="commons-cli-1.2.jar"/>
 				</fileset>
 			</classpath>
@@ -28,7 +28,7 @@
 	<target name="Jar" depends="Compile">
 		<mkdir dir="${dir.jar}"/>
 		<jar destfile="${dir.jar}/${jar.name}.jar" basedir="${dir.classes}">
-			<zipfileset includes="**/*.class" src="/Users/Shared/Java/Apache/commons-cli-1.2/commons-cli-1.2.jar"/>
+			<zipfileset includes="**/*.class" src="${basedir}/lib/Apache/commons-cli-1.2/commons-cli-1.2.jar"/>
 			<manifest>
 				<attribute name="Main-Class" value="${comp.main.class.qname}"/>
 			</manifest>
