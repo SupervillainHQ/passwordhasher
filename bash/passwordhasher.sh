@@ -26,7 +26,7 @@ spch(){
 		#echo "evaluating char $char"
 		if [[ $char =~ ^[0-9]+$ ]] && [[ $flag -eq "0" ]]; then
 			#echo "  transforming char $char"
-			char=`echo $char | tr 0123456789 Ω!§∑ƒ@£†≈◊`
+			char=`echo $char | tr 0123456789 °!§#¥%@£ß∂`
 			#echo "  to $char"
 			flag="1"
 		fi
@@ -39,9 +39,6 @@ spch(){
 
 read -s -p "salt: " salt
 domain=`pbpaste`
-
-#echo "Domain: $domain"
-#echo "Salt: $salt"
 
 hash=`echo -n "$domain$salt" | md5`
 
@@ -63,7 +60,5 @@ do
 		#echo $hash
 	fi
 done
-
-echo $hash
 
 echo -n "$hash" | pbcopy
