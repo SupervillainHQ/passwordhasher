@@ -3,7 +3,7 @@
 # Serialize domain-specific hash transformations so they will be done automagically per domain
 
 db="$HOME/pwh.db"
-echo "Using db: $db"
+#echo "Using db: $db"
 
 if [[ ! -f ${db} ]]; then
   echo "Database unavailable. Please install first"
@@ -72,29 +72,34 @@ getDomainRules(){
 
 	rulesData=`sqlite3 "$db" "select rules_mask, pwd_len from domain_rules where domain = '$domain';"`
 
-  echo $rulesData
+#  echo $rulesData
   IFS='|' read -ra rulesArr <<< "$rulesData"
 
   rules="${rulesArr[0]}"
   pwdLen="${rulesArr[1]}"
-  echo "rules: $rules"
-  echo "pwd-len: $pwdLen"
+#  echo "rules: $rules"
+#  echo "pwd-len: $pwdLen"
+
+  str=""
 
   if (( $((rules & 1)) | 0 ))
   then
-    echo "UCF recognised";
+#    echo "UCF recognised";
+    str="ucf $str"
   fi
 
   if (( $((rules & 2)) | 0 ))
   then
     echo "SPCH recognised";
+    str="spch $str"
   fi
 
   if (( $((rules & 4)) | 0 ))
   then
-    echo "LEN recognised: $pwdLen"
+#    echo "LEN recognised: $pwdLen"
+    str="$pwdLen $str"
   fi
-
+  echo $str
 }
 
 # Remove rules
@@ -112,7 +117,7 @@ if [[ "$action" = "add" ]]; then
 fi
 
 if [[ "$action" = "get" ]]; then
-  echo "get rules for domain $domain from database $db"
+#  echo "get rules for domain $domain from database $db"
   getDomainRules $domain
   exit 0
 fi

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-#my string
+#rismasystems.com
 #
+DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 # yes, some places still require shorter passwords!
 trunc(){
@@ -42,23 +43,64 @@ domain=`pbpaste`
 
 hash=`echo -n "$domain$salt" | md5`
 
-# transform password so certain limitations are met
-for var in "$@"
-do
-	if [[ "$var" =~ ^[0-9]{2}$ ]]; then
-		trunc $var
-		#echo $hash
-	fi
+if [[ $# -eq 0 ]]; then
+  echo "fetch rules from pwh.db"
+  savedArgs=`source "$DIR/pwhsettings.sh" get "$domain" $hash`
+#  echo $savedArgs
+  IFS=' ' read -ra argz <<< "$savedArgs"
 
-	if [[ "$var" = "ucf" ]]; then
-		ucf
-		#echo $hash
-	fi
+  echo "saved args:"
+  echo ${#argz[@]}
+#  rules="${rulesArr[0]}"
+#  pwdLen="${rulesArr[1]}"
 
-	if [[ "$var" = "spch" ]]; then
-		spch
-		#echo $hash
-	fi
-done
+  # transform password so certain limitations are met
+  for var in "${argz[@]}"
+  do
+    if [[ "$var" =~ ^[0-9]{2}$ ]]; then
+      echo "truncate to len"
+      trunc $var
+      #echo $hash
+    fi
+
+    if [[ "$var" = "ucf" ]]; then
+      echo "upper-char first"
+      ucf
+      #echo $hash
+    fi
+
+    if [[ "$var" = "spch" ]]; then
+      echo "transform char"
+      spch
+      #echo $hash
+    fi
+  done
+
+else
+  echo "fetch rules from arguments"
+  # transform password so certain limitations are met
+  for var in "$@"
+  do
+    echo "eval [$var]"
+    if [[ "$var" =~ ^[0-9]{2}$ ]]; then
+#      echo "truncate to len"
+      trunc $var
+      #echo $hash
+    fi
+
+    if [[ "$var" = "ucf" ]]; then
+#      echo "upper-char first"
+      ucf
+      #echo $hash
+    fi
+
+    if [[ "$var" = "spch" ]]; then
+#      echo "transform char"
+      spch
+      #echo $hash
+    fi
+  done
+fi
+
 
 echo -n "$hash" | pbcopy
