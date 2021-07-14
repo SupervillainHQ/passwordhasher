@@ -40,6 +40,7 @@ domain=`pbpaste`
 hash=`echo -n "$domain$salt" | md5`
 
 if [[ $# -eq 0 ]]; then
+  # No args passed means that we should look for rules specific to the domain in the settings sqlite db
   savedArgs=`source "$DIR/pwhsettings.sh" get "$domain" $hash`
   IFS=' ' read -ra argz <<< "$savedArgs"
 
@@ -62,23 +63,25 @@ if [[ $# -eq 0 ]]; then
   done
 
 else
+  # Passing args means that we have been specified which rules to apply for transforming the hash. We should probably also
+  # serialise these rules to the settings sqlite db.
   for var in "$@"
   do
     if [[ "$var" =~ ^[0-9]{2}$ ]]; then
       trunc $var
-      #echo $hash
     fi
 
     if [[ "$var" = "ucf" ]]; then
       ucf
-      #echo $hash
     fi
 
     if [[ "$var" = "spch" ]]; then
       spch
-      #echo $hash
     fi
   done
+
+  # Pass args and domain to db serialisation
+  source "$DIR/pwhsettings.sh" add $domain $*
 fi
 
 
