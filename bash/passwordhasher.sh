@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
-#rismasystems.com
 #
+# Create a string that can be used as a password, by combining a string with a secret string and hash it.
+#
+# Select a string and copy it into the clipboard (where cmd-c stores the marked text), then run this script.
+# Input your secret when prompted, then the copied string is combined with your secret and the clipboard now contains
+# your hash, ready for pasting into a password field.
+# I usually select the domain from a website and copy that into the clipboard, so I can have a unique password for every
+# website on which I have an account. I just need to remember the same secret.
+#
+
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 # yes, some places still require shorter passwords!
