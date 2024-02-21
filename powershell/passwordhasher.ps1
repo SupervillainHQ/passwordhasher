@@ -16,8 +16,9 @@ function FirstCap{
             $char = [char]($char - 32)
             $first = $true
         }
-        $stack = "$stack" + "$char"
+        $stack = $stack + $char
     }
+
     return $stack
 }
 
@@ -37,6 +38,5 @@ if($firstCap){
     $hash = FirstCap $hash.ToLower()
 }
 
-[System.Windows.Forms.Clipboard]::SetText($hash.ToLower())
+[System.Windows.Forms.Clipboard]::SetText($hash)
 
-#Write-Host $hash
