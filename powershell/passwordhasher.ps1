@@ -28,7 +28,7 @@ function FirstNum{
         [string]$hash
     )
 
-    $subs = "!@#¤%&/()="
+    $subs = "$!@#?%&/()"
     $stack = ""
     $first = $false
     foreach ($char in [char[]]$hash) {
