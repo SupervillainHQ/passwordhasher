@@ -5,11 +5,11 @@ if (sendMessageId) {
     chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tabs) 
     {
             var tab = tabs[0];
-            alert(tab.url);
-            //alert("copy domain substring from address url '" + tab.url + "'!");
+
+            var a = document.createElement('a');
+            a.href = tab.url;
+            alert(a.hostname);
             
     });
-    //var url = window.location;
-    //alert("copy domain substring from address url '" + url + "'!");
   };
 }
