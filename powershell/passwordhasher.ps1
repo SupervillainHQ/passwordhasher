@@ -1,7 +1,7 @@
 param(
     [Alias("c")][ValidateRange(0, 16)][int]$Cap = 0,
     [Alias("s")][ValidateRange(0, 16)][int]$Specials = 0,
-    [ValidateRange(6, 32)][int]$Len = 32,
+    [Alias("l")][ValidateRange(6, 32)][int]$Len = 32,
     [Alias("h")][switch]$Help = $false
 )
 
