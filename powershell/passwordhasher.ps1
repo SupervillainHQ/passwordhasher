@@ -2,7 +2,8 @@ param(
     [Alias("c")][ValidateRange(0, 16)][int]$Cap = 0,
     [Alias("s")][ValidateRange(0, 16)][int]$Specials = 0,
     [Alias("l")][ValidateRange(6, 32)][int]$Len = 32,
-    [Alias("h")][switch]$Help = $false
+    [Alias("m")][switch]$Mute,
+    [Alias("h")][switch]$Help
 )
 
 Add-Type -AssemblyName 'System.Windows.Forms'
@@ -31,20 +32,42 @@ if($Help){
     Write-Host "Passwordhasher (Powershell) 2.0"
     Write-Host "  Creates a 32 character hash from the clipboard contents and a secret."
     Write-Host "  Use the hash as password by copying a website domain to the clipboard"
-    Write-Host "  and input a secret, then submit the clipboard contents as the pass-"
+    Write-Host "  and input a secret, then replaces the clipboard contents as the pass-"
     Write-Host "  word. This way you can reuse the secret across several website domains"
-    Write-Host "Usage"
-    Write-Host "  Passwordhasher.ps1 [-Cap|c <int>][-Specials|s <int>]"
+    Write-Host ""
+    Write-Host "Usage:"
+    Write-Host "  Passwordhasher.ps1 [-Cap|c <int 0-16>][-Specials|s <int 0-16>][-Len|l <int 6-32>]"
+    Write-Host ""
+    Write-Host "Parameters:"
+    Write-Host "  Cap       (Capitalise) Replace characters with upper-case characters"
+    Write-Host "            to the hash. Supplied number dictates amount of upper-case"
+    Write-Host "            characters replaced."
+    Write-Host "            Characters are replaced from right to left."
+    Write-Host "            Default is 0"
+    Write-Host "  Specials  (Special characters) Replace characters with special char-"
+    Write-Host "            acters to the hash. Supplied number dictates amount of"
+    Write-Host "            upper-case characters replaced."
+    Write-Host "            Characters are replaced from right to left."
+    Write-Host "            Default is 0"
+    Write-Host "  Length    Pad the hash to the specified length."
+    Write-Host "            This is done before the other parameters are applied"
+    Write-Host "            Default is 32"
+    Write-Host "  Mute      Hides the domain when prompting for the secret."
+    Write-Host ""
+    Write-Host "  Help      Displays this help."
+    Write-Host ""
     exit 0
 }
 
 $utf8 = new-object -TypeName System.Text.UTF8Encoding
 
-$secureSalt = Read-Host -AsSecureString -Prompt 'Input salt'
+$domain = [System.Windows.Forms.Clipboard]::GetText()
+$prompt = If ($Mute) {"Input salt"} Else {"Input secret for '$domain'"}
+$secureSalt = Read-Host -AsSecureString -Prompt $prompt
 $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureSalt)
 $salt = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
 
-$clipped = [System.Windows.Forms.Clipboard]::GetText() + $salt
+$clipped = $domain + $salt
 
 $stream = [System.IO.MemoryStream]::new($utf8.GetBytes($clipped))
 $hash = Get-FileHash -Algorithm MD5 -InputStream $stream | Select-Object -ExpandProperty Hash
