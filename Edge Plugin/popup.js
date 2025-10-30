@@ -25,6 +25,7 @@ if (domainButton) {
                 });
             }
         });
+        window.close();
     };
 }
 
@@ -45,5 +46,6 @@ if (svrNameButton) {
                 console.log(error);
             });
         });
+        window.close();
     };
 }
