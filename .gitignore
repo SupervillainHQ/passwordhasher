@@ -3,3 +3,6 @@ vagrant/.vagrant
 vagrant/*.log
 /bin/
 lib/*/
+php/vendor
+php/composer.lock
+.phpunit.*.cache
