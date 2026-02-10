@@ -5,3 +5,4 @@ vagrant/*.log
 lib/*/
 php/vendor
 php/composer.lock
+.phpunit.*.cache
