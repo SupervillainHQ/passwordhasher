@@ -3,11 +3,16 @@
     "description": "Passwordhashing for creating domain-specific and unique passwords",
     "autoload": {
         "psr-0" : {
-            "svhq" : "src"
+            "svhq" : "./php/src"
+        }
+    },
+    "autoload-dev": {
+        "prs-0": {
+            "tests": "./php/tests"
         }
     },
     "config" : {
-        "vendor-dir": "./vendor"
+        "vendor-dir": "./php/vendor"
     },
     "require": {
         "php": "^8",

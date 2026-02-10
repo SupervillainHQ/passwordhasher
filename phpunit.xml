@@ -7,7 +7,7 @@
     displayDetailsOnPhpunitDeprecations="true">
     <testsuites>
         <testsuite name="Default">
-            <directory>tests/svhq/passwordhasher</directory>
+            <directory>php/tests/svhq/passwordhasher</directory>
         </testsuite>
     </testsuites>
 </phpunit>
